@@ -1,0 +1,221 @@
+var indexOf = function(array, value) {
+    for (var i=0; i<array.length; i++) {
+        if (array[i] == value) {
+            return i;
+        }
+    }
+    return -1;
+};
+
+var binarySearch = function(array, value, start, end) {
+    var start = start === undefined ? 0 : start;
+    var end = end === undefined ? array.length : end;
+
+    if (start > end) {
+        return -1;
+    }
+
+    var index = Math.floor((start + end) / 2);
+    var item = array[index];
+
+    console.log(start, end);
+    if (item == value) {
+        return index;
+    }
+    else if (item < value) {
+        return binarySearch(array, value, index + 1, end);
+    }
+    else if (item > value) {
+        return binarySearch(array, value, start, index - 1);
+    }
+};
+
+var BinaryTree = function(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+};
+
+tree = new BinarySearchTree();
+tree.insert("5", "five");
+tree.insert("4", "four");
+tree.insert("3", "three");
+tree.insert("1", "one");
+tree.insert("2", "two");
+tree.insert("6", "six");
+tree.insert("7", "seven");
+tree.insert("9", "nine");
+tree.insert("8", "eight");
+
+BinarySearchTree.prototype.bfs = function(values) {
+    values = values || [];
+
+    var queue = [this];
+
+    while (queue.length) {
+        var node = queue.shift();
+        values.push(node.value);
+
+        if (node.left) {
+            queue.push(node.left);
+        }
+
+        if (node.right) {
+            queue.push(node.right);
+        }
+    }
+
+    return values;
+};
+
+
+//Exercise 1
+// Given the following dataset
+
+// 89 30 25 32 72 70 51 42 25 24 53 55 78 50 13 40 48 32 26 2 14 33 45 72 56 44 21 88 27 68 15 93 98 73 28 16 46 87 28 65 38 67 16 85 63 23 69 64 91 9 70 81 27 97 82 6 88 3 7 46 13 11 64 31 26 38 28 13 17 69 90 1 6 7 64 43 9 73 80 98 46 27 22 87 49 83 6 39 42 51 54 84 34 53 78 40 14 5 76 62
+
+// Write a function to find a particular value in the unsorted list.
+let array = "89 30 25 32 72 70 51 42 25 24 53 55 78 50 13 40 48 32 26 2 14 33 45 72 56 44 21 88 27 68 15 93 98 73 28 16 46 87 28 65 38 67 16 85 63 23 69 64 91 9 70 81 27 97 82 6 88 3 7 46 13 11 64 31 26 38 28 13 17 69 90 1 6 7 64 43 9 73 80 98 46 27 22 87 49 83 6 39 42 51 54 84 34 53 78 40 14 5 76 62"
+
+array = array.split(" ")
+function linearSearch(array, value) {
+  let indexes = [];
+  for(let a in array) {
+    if(array[a] == value) {
+      indexes.push(parseInt(a))
+    }
+  }
+  if(indexes.length) {
+    return indexes
+  } else {
+    return -1
+  }
+}
+
+// Exercise 2
+// Use the dataset from the previous exercise for this exercise. Use array.sort to sort the dataset. Then implement Binary search to find a particular value in the dataset.
+
+//sort array sequentially (compare function needed, otherwise sorting according to unicode values)
+array.sort(function(a, b) {
+  return a - b;
+})
+
+var binarySearch = function(array, value, start, end, indexes) {
+    var start = start === undefined ? 0 : start;
+    var end = end === undefined ? array.length : end;
+    var indexes = indexes === undefined ? [] : indexes;
+
+
+    if (start > end ) {
+        return -1;
+    }
+
+    var index = Math.floor((start + end) / 2);
+    var item = array[index];
+
+    if (item == value) {
+      function rightMostRepeatingValue(array, index, value) {
+            if(array[index + 1] == value) {
+                return rightMostRepeatingValue(array, index + 1, value)
+              }
+            return index;
+          }
+      let rightMostIndex = rightMostRepeatingValue(array, index, value);
+      function checkAdjacentValues(array, index, value, indexes) {
+        indexes.push(index);
+        if(array[index - 1] != value) {
+          return indexes;
+        }
+        if(array[index - 1] == array[index]) {
+          return checkAdjacentValues(array, index - 1, value, indexes);
+        }
+      }
+      indexes = checkAdjacentValues(array, rightMostIndex, value, indexes);
+      return indexes.sort(function(a,b) {
+        return a - b;
+      });
+    }
+    else if (item < value) {
+        return binarySearch(array, value, index + 1, end, indexes);
+    }
+    else if (item > value) {
+        return binarySearch(array, value, start, index - 1, indexes);
+    }
+};
+
+//Exercise 3
+// Imagine you are looking for a book in a library with a Dewey Decimal index. How would you go about it? Can you express this process as a searching algorithm?
+// As a sorted list without repeating values, a binary search algorithm would work.
+
+// Exercise 4
+// Use paper and pen for this part of the exercise.
+
+// What is the output for an in-order traversal through the following binary tree Binary tree
+// https://github.com/tparveen/Binary_tree_exercises/blob/master/tree1.png
+19, 21, 29, 30, 33, 34, 46, 46, 85
+
+// What is the output for a post-order traversal through the following binary tree Binary tree
+// https://github.com/tparveen/Binary_tree_exercises/blob/master/tree2.png
+33, 45, 43, 62, 88, 77, 61, 95, 94
+
+// What is the output for a Pre-order traversal through the following binary tree Binary tree
+// https://github.com/tparveen/Binary_tree_exercises/blob/master/tree3.png
+62, 17, 16, 28, 55, 83, 68, 93
+
+// Exercise 5
+// Implement a Binary tree and its insertion function. Then implement in-order, pre-order, and post-order functions. Insert the following data in your binary tree -
+
+// 25 15 50 10 24 35 70 4 12 18 31 44 66 90 22
+
+// Check your answers:
+
+// A Pre-order traversal should give you the following order: 25, 15, 10, 4, 12, 24, 18, 22, 50, 35, 31, 44, 70, 66, 90
+
+// InOrder: 4, 10, 12, 15, 18, 22, 24, 25, 31, 35, 44, 50, 66, 70, 90
+
+// Post-order: 4, 12, 10, 22, 18, 24, 15, 31, 44, 35, 66, 90, 70, 50, 25
+
+//create binary tree
+let tree = new BinarySearchTree();
+let array = "25 15 50 10 24 35 70 4 12 18 31 44 66 90 22".split(" ");
+
+function insertArrayIntoBinaryTree(array, tree) {
+  for(let a in array) {
+    tree.insert(parseInt(array[a]), array[a]);
+  }
+  return tree;
+}
+
+insertArrayIntoBinaryTree(array, tree);
+display(tree);
+
+
+BinarySearchTree.prototype.preOrderTraversal = function(output) {
+  var output = output || [];
+  output.push(this.key);
+  if(this.left) output = this.left.preOrderTraversal(output);
+  if(this.right) output = this.right.preOrderTraversal(output);
+  return output;
+}
+
+BinarySearchTree.prototype.inOrderTraversal = function(output) {
+  var output = output || [];
+  if(this.left) output = this.left.inOrderTraversal(output);
+  output.push(this.key);
+  if(this.right) output = this.right.inOrderTraversal(output);
+  return output;
+}
+
+BinarySearchTree.prototype.postOrderTraversal = function(output) {
+  var output = output || [];
+  if(this.left) output = this.left.postOrderTraversal(output);
+  if(this.right) output = this.right.postOrderTraversal(output);
+  output.push(this.key);
+  return output;
+}
+
+
+
+
+
+
